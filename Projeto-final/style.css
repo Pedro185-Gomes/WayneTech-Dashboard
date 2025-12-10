@@ -90,9 +90,10 @@ th, td {
 }
 
 .dashboard canvas {
-  max-width: 300px;  /* largura máxima */
+  max-width: 300px; 
   max-height: 200px; 
   background: #111;
   padding: 10px;
   border-radius: 8px;
 }
+
