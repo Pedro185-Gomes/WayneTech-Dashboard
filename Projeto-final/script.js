@@ -5,17 +5,16 @@ const users = {
   "robin": { password: "sidekick", role: "funcionario" }
 };
 
-let resources = JSON.parse(localStorage.getItem("resources")) || []; // carrega do localStorage
+let resources = JSON.parse(localStorage.getItem("resources")) || []; 
 let editIndex = null;
 
-// --- LOGIN ---
 function login() {
   const user = document.getElementById("user").value;
   const pass = document.getElementById("pass").value;
 
   if (users[user] && users[user].password === pass) {
     localStorage.setItem("userRole", users[user].role);
-    window.location.href = "dashboard.html"; // redireciona após login
+    window.location.href = "dashboard.html"; 
   } else {
     document.getElementById("error").innerText = "Credenciais inválidas!";
   }
@@ -23,10 +22,9 @@ function login() {
 
 function logout() {
   localStorage.removeItem("userRole");
-  window.location.href = "login.html"; // volta para login
+  window.location.href = "login.html"; 
 }
 
-// --- CRUD DE RECURSOS ---
 function addOrUpdateResource() {
   const role = localStorage.getItem("userRole");
   if (role !== "admin") {
@@ -112,7 +110,6 @@ function renderTable() {
   });
 }
 
-// --- CARDS DE ESTATÍSTICA ---
 function updateCards() {
   const totalEquip = resources.filter(r => r.tipo === "Equipamento").length;
   const totalVeic = resources.filter(r => r.tipo === "Veículo").length;
@@ -123,12 +120,10 @@ function updateCards() {
   document.getElementById("totalDisp").innerText = `Dispositivos: ${totalDisp}`;
 }
 
-// --- SALVAR NO LOCALSTORAGE ---
 function saveResources() {
   localStorage.setItem("resources", JSON.stringify(resources));
 }
 
-// Proteção: só acessa o dashboard se tiver logado
 document.addEventListener("DOMContentLoaded", () => {
   const isDashboard = window.location.pathname.includes("dashboard.html");
   if (isDashboard) {
@@ -140,27 +135,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
-// --- GRÁFICOS --- //
+
 let chartTipo, chartStatus;
 
 function renderCharts() {
   const ctxTipo = document.getElementById("chartTipo").getContext("2d");
   const ctxStatus = document.getElementById("chartStatus").getContext("2d");
 
-  // Conta recursos por tipo
   const totalEquip = resources.filter(r => r.tipo === "Equipamento").length;
   const totalVeic = resources.filter(r => r.tipo === "Veículo").length;
   const totalDisp = resources.filter(r => r.tipo === "Dispositivo de Segurança").length;
 
-  // Conta status
   const totalAtivos = resources.filter(r => r.status.toLowerCase() === "ativo").length;
   const totalManut = resources.filter(r => r.status.toLowerCase() === "em manutenção").length;
 
-  // Destroi gráficos anteriores se já existirem (para atualizar sem bug)
   if (chartTipo) chartTipo.destroy();
   if (chartStatus) chartStatus.destroy();
 
-  // Gráfico de pizza (por tipo)
   chartTipo = new Chart(ctxTipo, {
     type: "pie",
     data: {
@@ -172,7 +163,6 @@ function renderCharts() {
     }
   });
 
-  // Gráfico de barras (por status)
   chartStatus = new Chart(ctxStatus, {
     type: "bar",
     data: {
@@ -187,7 +177,6 @@ function renderCharts() {
   });
 }
 
-// Chama os gráficos sempre que atualizar a tabela
 function renderTable() {
   const tbody = document.getElementById("resourceTable");
   if (!tbody) return;
@@ -207,5 +196,6 @@ function renderTable() {
   });
 
   updateCards();
-  renderCharts(); // <<< adiciona aqui
+  renderCharts(); 
 }
+
